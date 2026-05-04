@@ -1,25 +1,37 @@
 package com.uce.prueba.evaluacion.dominio.model;
 
-import lombok.Value;
-import java.time.LocalDateTime;
-
-/**
- * Entidad de Dominio que representa la calificación final.
- * Regla de Negocio: Inmutabilidad del Diagnóstico una vez procesado.
- * Vinculado a subtarea KAN-26.
- */
-@Value
 public class Nota {
-    Double valor; // El puntaje final calculado
-    LocalDateTime fechaGeneracion;
-    String observaciones; // Detalles adicionales del desempeño
-
-    public Nota(Double valor) {
-        if (valor < 0 || valor > 10) { // Ejemplo de validación de rango académico
-            throw new IllegalArgumentException("La nota debe estar en un rango válido (0-10)");
+    
+    private final String valor;
+    private final NivelComprension nivel;
+    private final int puntaje;
+    private final int total;
+    
+    public Nota(NivelComprension nivel, String valor, int puntaje, int total) {
+        if (nivel == null) {
+            throw new IllegalArgumentException("El nivel es obligatorio");
         }
-        this.valor = valor;
-        this.fechaGeneracion = LocalDateTime.now();
-        this.observaciones = "Diagnóstico generado automáticamente por el sistema.";
+        if (valor == null || valor.isBlank()) {
+            throw new IllegalArgumentException("El valor de la nota es obligatorio");
+        }
+        if (puntaje < 0 || puntaje > total) {
+            throw new IllegalArgumentException("El puntaje no puede ser negativo ni mayor al total");
+        }
+        if (total <= 0) {
+            throw new IllegalArgumentException("El total debe ser positivo");
+        }
+        this.nivel = nivel;
+        this.valor = valor.toUpperCase();
+        this.puntaje = puntaje;
+        this.total = total;
+    }
+    
+    public String getValor() { return valor; }
+    public NivelComprension getNivel() { return nivel; }
+    public int getPuntaje() { return puntaje; }
+    public int getTotal() { return total; }
+    
+    public double getPorcentaje() {
+        return (double) puntaje / total * 100;
     }
 }

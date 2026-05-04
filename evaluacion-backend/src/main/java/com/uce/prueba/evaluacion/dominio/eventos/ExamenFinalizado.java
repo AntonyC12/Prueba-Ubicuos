@@ -1,31 +1,30 @@
 package com.uce.prueba.evaluacion.dominio.eventos;
 
 import com.uce.prueba.evaluacion.dominio.model.Respuesta;
-import lombok.Value;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-/**
- * Evento de Dominio que se publica cuando un Evaluado termina su test.
- * Transporta los datos necesarios para que el Motor de Diagnóstico inicie el
- * cálculo.
- * Vinculado a subtarea KAN-28.
- */
-@Value
 public class ExamenFinalizado {
-    Long evaluadoId; // Identidad del estudiante (Frontera con BC_Acceso)
-    List<Respuesta> respuestas; // Lista de Value Objects con las respuestas dadas
-    LocalDateTime fechaFinalizacion;
-
+    
+    private final Long evaluadoId;
+    private final List<Respuesta> respuestas;
+    private final LocalDateTime fechaFinalizacion;
+    
     public ExamenFinalizado(Long evaluadoId, List<Respuesta> respuestas) {
-        if (evaluadoId == null) {
-            throw new IllegalArgumentException("El ID del evaluado es obligatorio para el evento");
+        if (evaluadoId == null || evaluadoId <= 0) {
+            throw new IllegalArgumentException("El ID del evaluado es obligatorio");
         }
         if (respuestas == null || respuestas.isEmpty()) {
-            throw new IllegalArgumentException("El evento debe contener al menos una respuesta para ser procesado");
+            throw new IllegalArgumentException("Debe haber al menos una respuesta");
         }
         this.evaluadoId = evaluadoId;
-        this.respuestas = List.copyOf(respuestas); // Mantenemos la inmutabilidad
+        this.respuestas = Collections.unmodifiableList(new ArrayList<>(respuestas));
         this.fechaFinalizacion = LocalDateTime.now();
     }
+    
+    public Long getEvaluadoId() { return evaluadoId; }
+    public List<Respuesta> getRespuestas() { return respuestas; }
+    public LocalDateTime getFechaFinalizacion() { return fechaFinalizacion; }
 }
