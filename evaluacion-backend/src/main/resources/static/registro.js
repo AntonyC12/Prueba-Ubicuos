@@ -45,10 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await response.json();
 
-            // KAN-32: Guardamos el ID de forma segura en la sesión del navegador
-            sessionStorage.setItem('evaluadoId', data.id); // Asegúrate de que tu backend devuelve 'id', si no, pon el nombre correcto.
-
-            // KAN-31: Emitimos el estado global
+            sessionStorage.setItem('evaluadoId', data.id);
+            
             sessionStorage.setItem('estadoEvaluado', 'Autenticado');
 
 
