@@ -1,22 +1,28 @@
 package com.uce.prueba.evaluacion.dominio.model;
 
-/**
- * Enum que representa el nivel cualitativo de conocimiento alcanzado.
- * Basado en el Glosario de Lenguaje Ubicuo.
- * Vinculado a subtarea KAN-27.
- */
 public enum NivelComprension {
-    BASICO("Nivel inicial de conocimiento en la materia."),
-    INTERMEDIO("Conocimiento sólido con capacidad de aplicación práctica."),
-    AVANZADO("Dominio experto y capacidad de resolución de problemas complejos.");
-
-    private final String descripcion;
-
-    NivelComprension(String descripcion) {
-        this.descripcion = descripcion;
+    
+    BASICO(0, 49, "C"),
+    INTERMEDIO(50, 69, "B"),
+    AVANZADO(70, 100, "A");
+    
+    private final int minimo;
+    private final int maximo;
+    private final String nota;
+    
+    NivelComprension(int minimo, int maximo, String nota) {
+        this.minimo = minimo;
+        this.maximo = maximo;
+        this.nota = nota;
     }
-
-    public String getDescripcion() {
-        return descripcion;
+    
+    public int getMinimo() { return minimo; }
+    public int getMaximo() { return maximo; }
+    public String getNota() { return nota; }
+    
+    public static NivelComprension fromPorcentaje(double porcentaje) {
+        if (porcentaje >= AVANZADO.minimo) return AVANZADO;
+        if (porcentaje >= INTERMEDIO.minimo) return INTERMEDIO;
+        return BASICO;
     }
 }
