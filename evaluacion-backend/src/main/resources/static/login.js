@@ -1,17 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('loginForm');
-    const mensajeAlerta = document.getElementById('mensajeAlerta');
-    const btnLogin = document.getElementById('btnLogin');
+    const mensajeAlerta = document.getElementById('mensajeError'); // ID corregido
+    const btnLogin = document.getElementById('btnIngresar'); // ID corregido
 
     form.addEventListener('submit', async (evento) => {
         evento.preventDefault();
 
         mensajeAlerta.style.display = 'none';
-        mensajeAlerta.className = 'alert-message';
 
-        // CAPTURA (KAN-13)
-        const credencial = document.getElementById('loginCredencial').value.trim();
-        const password = document.getElementById('loginPassword').value.trim();
+        // CAPTURA (KAN-13) - IDs corregidos
+        const credencial = document.getElementById('credencialEmail').value.trim();
+        const password = document.getElementById('credencialPassword').value.trim();
 
         // VALIDACIONES (KAN-14)
         if (!credencial || !password) {
@@ -25,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // MAPEO (Enviamos 'email' para que tu Java lo reciba bien)
+        // MAPEO
         const loginData = {
             email: credencial,
             password: password
@@ -45,10 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             mostrarAlerta('¡Bienvenido! Entrando al sistema...', 'success');
 
-            // KAN-32: Guardamos el ID que viene de la base de datos
-            sessionStorage.setItem('evaluadoId', data.id || data.evaluadoId);
+            // KAN-32: Guardamos el ID
+            sessionStorage.setItem('evaluadoId', data.evaluadoId || data.id);
             
-            // KAN-31: ¡ESTA ES LA QUE FALTA! Emitimos el estado para el Guard
+            // KAN-31: Emitimos el estado para el Guard (¡Esto evita que te rebote!)
             sessionStorage.setItem('estadoEvaluado', 'Autenticado');
             
             setTimeout(() => {
@@ -62,7 +61,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function mostrarAlerta(mensaje, tipo) {
         mensajeAlerta.textContent = mensaje;
-        mensajeAlerta.classList.add(tipo === 'error' ? 'alert-error' : 'alert-success');
         mensajeAlerta.style.display = 'block';
+        
+        // Ajuste de colores rápido por si es éxito o error
+        if (tipo === 'success') {
+            mensajeAlerta.style.backgroundColor = '#dcfce7';
+            mensajeAlerta.style.color = '#166534';
+            mensajeAlerta.style.borderColor = '#86efac';
+        } else {
+            mensajeAlerta.style.backgroundColor = 'var(--error-bg)';
+            mensajeAlerta.style.color = 'var(--error-text)';
+            mensajeAlerta.style.borderColor = '#fca5a5';
+        }
     }
 });
