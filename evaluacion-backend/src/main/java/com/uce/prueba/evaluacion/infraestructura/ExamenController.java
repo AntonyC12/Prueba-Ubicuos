@@ -47,7 +47,7 @@ public class ExamenController {
             @RequestBody List<RespuestaRequestItem> respuestasData) {
         
         List<Respuesta> respuestas = respuestasData.stream()
-            .map(r -> new Respuesta(r.getReactivoId(), r.getOpcionId()))
+            .map(r -> new Respuesta(evaluadoId, r.getReactivoId(), r.getOpcionId()))
             .toList();
         
         realizarExamen.finalizarExamen(evaluadoId, respuestas);
