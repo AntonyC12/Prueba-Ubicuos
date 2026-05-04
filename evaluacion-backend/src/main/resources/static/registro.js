@@ -1,21 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('loginForm');
+    const form = document.getElementById('registroForm');
     const mensajeAlerta = document.getElementById('mensajeAlerta');
-    const btnLogin = document.getElementById('btnLogin');
+
+    if (!form) {
+        console.error("Error: No se encontró el formulario 'registroForm' en el HTML.");
+        return; 
+    }
 
     form.addEventListener('submit', async (evento) => {
-        evento.preventDefault();
-
+        evento.preventDefault(); 
+        
         mensajeAlerta.style.display = 'none';
-        mensajeAlerta.className = 'alert-message';
 
-        // CAPTURA (KAN-13)
-        const credencial = document.getElementById('loginCredencial').value.trim();
-        const password = document.getElementById('loginPassword').value.trim();
+        const credencial = document.getElementById('registroCredencial').value.trim();
+        const nombre = document.getElementById('registroNombre').value.trim();
+        const password = document.getElementById('registroPassword').value.trim();
 
-        // VALIDACIONES (KAN-14)
-        if (!credencial || !password) {
-            mostrarAlerta('Por favor, ingresa tu credencial y contraseña.', 'error');
+        if (!credencial || !nombre || !password) {
+            mostrarAlerta('Todos los campos son obligatorios.', 'error');
             return;
         }
 
@@ -25,30 +27,26 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const loginData = {
+        const nuevoEvaluado = {
             email: credencial,
+            nombre: nombre,
             password: password
         };
 
         try {
-            const response = await fetch('http://localhost:8080/api/autenticacion/login', {
+            const response = await fetch('http://localhost:8080/api/autenticacion/registro', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(loginData)
+                body: JSON.stringify(nuevoEvaluado)
             });
 
-            if (!response.ok) {
-                throw new Error('Credenciales incorrectas. Intenta de nuevo.');
-            }
+            if (!response.ok) throw new Error('Error al registrar en la base de datos');
 
-            const data = await response.json();
-            mostrarAlerta('¡Bienvenido! Entrando al sistema...', 'success');
-
-            sessionStorage.setItem('evaluadoId', data.evaluadoId);
+            mostrarAlerta('¡Registro exitoso! Redirigiendo...', 'success');
             
             setTimeout(() => {
                 window.location.href = 'evaluacion.html';
-            }, 1000);
+            }, 2000);
 
         } catch (error) {
             mostrarAlerta(error.message, 'error');
@@ -57,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function mostrarAlerta(mensaje, tipo) {
         mensajeAlerta.textContent = mensaje;
+        mensajeAlerta.className = 'alert-message';
         mensajeAlerta.classList.add(tipo === 'error' ? 'alert-error' : 'alert-success');
         mensajeAlerta.style.display = 'block';
     }
