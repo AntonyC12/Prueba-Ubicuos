@@ -1,27 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Enlazamos los elementos del HTML
-    const form = document.getElementById('registroForm');
+    const form = document.getElementById('loginForm');
     const mensajeAlerta = document.getElementById('mensajeAlerta');
+    const btnLogin = document.getElementById('btnLogin');
 
-    if (!form) {
-        console.error("Error: No se encontró el formulario 'registroForm' en el HTML.");
-        return; 
-    }
-
-    // 2. Interceptamos el clic del botón
     form.addEventListener('submit', async (evento) => {
-        evento.preventDefault(); 
-        
+        evento.preventDefault();
+
         mensajeAlerta.style.display = 'none';
+        mensajeAlerta.className = 'alert-message';
 
-        // 3. Capturamos los datos
-        const credencial = document.getElementById('registroCredencial').value.trim();
-        const nombre = document.getElementById('registroNombre').value.trim();
-        const password = document.getElementById('registroPassword').value.trim();
+        // CAPTURA (KAN-13)
+        const credencial = document.getElementById('loginCredencial').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
 
-        // 4. Validaciones de la KAN-14
-        if (!credencial || !nombre || !password) {
-            mostrarAlerta('Todos los campos son obligatorios.', 'error');
+        // VALIDACIONES (KAN-14)
+        if (!credencial || !password) {
+            mostrarAlerta('Por favor, ingresa tu credencial y contraseña.', 'error');
             return;
         }
 
@@ -31,36 +25,39 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 5. Preparamos los datos para enviar al Backend (KAN-13)
-        const nuevoEvaluado = {
-            email: credencial, // Enviamos como 'email' para que Java lo entienda
-            nombre: nombre,
+        // MAPEO (Enviamos 'email' para que tu Java lo reciba bien)
+        const loginData = {
+            email: credencial,
             password: password
         };
 
-        // 6. Enviamos a Spring Boot
         try {
-            const response = await fetch('http://localhost:8080/api/autenticacion/registro', {
+            const response = await fetch('http://localhost:8080/api/autenticacion/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(nuevoEvaluado)
+                body: JSON.stringify(loginData)
             });
 
-            if (!response.ok) throw new Error('Error al registrar en la base de datos');
+            if (!response.ok) {
+                throw new Error('Credenciales incorrectas. Intenta de nuevo.');
+            }
 
-            // 7. Éxito: Mostramos mensaje y limpiamos el formulario
-            mostrarAlerta('¡Registro exitoso! Por favor, haz clic en "Inicia sesión aquí" para continuar.', 'success');
-            form.reset();
+            const data = await response.json();
+            mostrarAlerta('¡Bienvenido! Entrando al sistema...', 'success');
+
+            sessionStorage.setItem('evaluadoId', data.evaluadoId);
+            
+            setTimeout(() => {
+                window.location.href = 'evaluacion.html';
+            }, 1000);
 
         } catch (error) {
             mostrarAlerta(error.message, 'error');
         }
     });
 
-    // Función de diseño para las alertas (KAN-33)
     function mostrarAlerta(mensaje, tipo) {
         mensajeAlerta.textContent = mensaje;
-        mensajeAlerta.className = 'alert-message';
         mensajeAlerta.classList.add(tipo === 'error' ? 'alert-error' : 'alert-success');
         mensajeAlerta.style.display = 'block';
     }

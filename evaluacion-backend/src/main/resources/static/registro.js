@@ -1,22 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Enlazamos los elementos del HTML
     const form = document.getElementById('registroForm');
     const mensajeAlerta = document.getElementById('mensajeAlerta');
 
     if (!form) {
         console.error("Error: No se encontró el formulario 'registroForm' en el HTML.");
-        return;
+        return; 
     }
 
+    // 2. Interceptamos el clic del botón
     form.addEventListener('submit', async (evento) => {
-        evento.preventDefault();
-
+        evento.preventDefault(); 
+        
         mensajeAlerta.style.display = 'none';
 
+        // 3. Capturamos los datos
         const credencial = document.getElementById('registroCredencial').value.trim();
         const nombre = document.getElementById('registroNombre').value.trim();
         const password = document.getElementById('registroPassword').value.trim();
 
-        //KAN 33 Validación de campos
+        // 4. Validaciones de la KAN-14
         if (!credencial || !nombre || !password) {
             mostrarAlerta('Todos los campos son obligatorios.', 'error');
             return;
@@ -28,12 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // 5. Preparamos los datos para enviar al Backend (KAN-13)
         const nuevoEvaluado = {
-            email: credencial,
+            email: credencial, // Enviamos como 'email' para que Java lo entienda
             nombre: nombre,
             password: password
         };
 
+        // 6. Enviamos a Spring Boot
         try {
             const response = await fetch('http://localhost:8080/api/autenticacion/registro', {
                 method: 'POST',
@@ -43,24 +48,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) throw new Error('Error al registrar en la base de datos');
 
-            const data = await response.json();
-            //KANS 
-            sessionStorage.setItem('evaluadoId', data.id);
-            
-            sessionStorage.setItem('estadoEvaluado', 'Autenticado');
-
-
-            mostrarAlerta('¡Registro exitoso! Redirigiendo...', 'success');
-
-            setTimeout(() => {
-                window.location.href = 'evaluacion.html';
-            }, 2000);
+            // 7. Éxito: Mostramos mensaje y limpiamos el formulario
+            mostrarAlerta('¡Registro exitoso! Por favor, haz clic en "Inicia sesión aquí" para continuar.', 'success');
+            form.reset();
 
         } catch (error) {
             mostrarAlerta(error.message, 'error');
         }
     });
 
+    // Función de diseño para las alertas (KAN-33)
     function mostrarAlerta(mensaje, tipo) {
         mensajeAlerta.textContent = mensaje;
         mensajeAlerta.className = 'alert-message';
