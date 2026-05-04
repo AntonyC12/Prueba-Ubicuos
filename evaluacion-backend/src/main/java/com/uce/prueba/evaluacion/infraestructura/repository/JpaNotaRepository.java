@@ -1,4 +1,4 @@
-package com.uce.prueba.evaluacion.infrestructura.repository;
+package com.uce.prueba.evaluacion.infraestructura.repository;
 
 import com.uce.prueba.evaluacion.dominio.model.NivelComprension;
 import com.uce.prueba.evaluacion.dominio.model.Nota;

@@ -1,4 +1,4 @@
-package com.uce.prueba.evaluacion.infrestructura.repository;
+package com.uce.prueba.evaluacion.infraestructura.repository;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
