@@ -47,10 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // KAN-32: Guardamos el ID que viene de la base de datos
             sessionStorage.setItem('evaluadoId', data.id || data.evaluadoId);
-
+            
             // KAN-31: ¡ESTA ES LA QUE FALTA! Emitimos el estado para el Guard
             sessionStorage.setItem('estadoEvaluado', 'Autenticado');
-
+            
             setTimeout(() => {
                 window.location.href = 'evaluacion.html';
             }, 1000);
@@ -58,10 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             mostrarAlerta(error.message, 'error');
         }
-
-        function mostrarAlerta(mensaje, tipo) {
-            mensajeAlerta.textContent = mensaje;
-            mensajeAlerta.classList.add(tipo === 'error' ? 'alert-error' : 'alert-success');
-            mensajeAlerta.style.display = 'block';
-        }
     });
+
+    function mostrarAlerta(mensaje, tipo) {
+        mensajeAlerta.textContent = mensaje;
+        mensajeAlerta.classList.add(tipo === 'error' ? 'alert-error' : 'alert-success');
+        mensajeAlerta.style.display = 'block';
+    }
+});
