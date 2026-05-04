@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Evaluación | UniDream</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #0f172a; --bg: #f8fafc; --card: #ffffff; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--primary); padding: 40px; }
+        .container { max-width: 800px; margin: 0 auto; background: var(--card); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        h1 { margin-bottom: 20px; font-size: 28px; }
+        .user-info { background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .btn-logout { padding: 10px 20px; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenido al Sistema de Evaluación</h1>
+        <div class="user-info">
+            <p><strong>Estado:</strong> <span id="userStatus">Cargando...</span></p>
+            <p><strong>ID de Evaluado:</strong> <span id="userIdDisplay">---</span></p>
+        </div>
+        <p>Has ingresado correctamente después de las validaciones de la KAN-14.</p>
+        <br>
+        <button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
+    </div>
+
+    <script>
+        // Recuperar datos guardados por registro.js o login.js
+        const status = sessionStorage.getItem('estadoEvaluado');
+        const id = sessionStorage.getItem('evaluadoId');
+
+        if (!status) {
+            // Si intenta entrar sin loguearse, lo mandamos al login
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('userStatus').textContent = status;
+            document.getElementById('userIdDisplay').textContent = id;
+        }
+
+        function cerrarSesion() {
+            sessionStorage.clear();
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
