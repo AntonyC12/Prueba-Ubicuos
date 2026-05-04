@@ -2,46 +2,49 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panel de Evaluación | UniDream</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen | Sistema de Evaluación</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #0f172a; --bg: #f8fafc; --card: #ffffff; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--primary); padding: 40px; }
-        .container { max-width: 800px; margin: 0 auto; background: var(--card); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        h1 { margin-bottom: 20px; font-size: 28px; }
-        .user-info { background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-        .btn-logout { padding: 10px 20px; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer; }
+        :root { --primary: #0f172a; --primary-hover: #1e293b; --bg-color: #f8fafc; --card-bg: #ffffff; --text-main: #334155; --border: #e2e8f0; --success-bg: #dcfce7; --success-text: #166534; --error-bg: #fef2f2; --error-text: #ef4444; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 40px 20px; }
+        .container { max-width: 700px; margin: 0 auto; background-color: var(--card-bg); padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid var(--border); padding-bottom: 20px; }
+        .header h2 { color: var(--primary); font-size: 24px; margin-bottom: 8px; }
+        
+        /* Estilos de las preguntas */
+        .reactivo-card { margin-bottom: 30px; }
+        .reactivo-pregunta { font-size: 16px; font-weight: 600; margin-bottom: 15px; color: var(--primary); }
+        .opcion-label { display: block; padding: 12px 15px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: background 0.2s; font-size: 15px; }
+        .opcion-label:hover { background-color: var(--bg-color); }
+        .opcion-input { margin-right: 12px; cursor: pointer; }
+        
+        .btn-submit { width: 100%; padding: 15px; background-color: var(--primary); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-submit:hover { background-color: var(--primary-hover); }
+        .btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; }
+        .alert-message { padding: 15px; border-radius: 8px; text-align: center; font-weight: 500; display: none; margin-bottom: 20px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Bienvenido al Sistema de Evaluación</h1>
-        <div class="user-info">
-            <p><strong>Estado:</strong> <span id="userStatus">Cargando...</span></p>
-            <p><strong>ID de Evaluado:</strong> <span id="userIdDisplay">---</span></p>
+        <div class="header">
+            <h2>Examen de Diagnóstico</h2>
+            <p>Por favor, responde todas las preguntas para finalizar.</p>
         </div>
-        <p>Has ingresado correctamente después de las validaciones de la KAN-14.</p>
-        <br>
-        <button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
+
+        <div id="mensajeAlerta" class="alert-message"></div>
+
+        <form id="evaluacionForm">
+            <!-- El JS inyectará las preguntas aquí adentro -->
+            <div id="contenedorReactivos">
+                <p style="text-align: center; color: #64748b;">Cargando preguntas del servidor...</p>
+            </div>
+
+            <button type="submit" class="btn-submit" id="btnFinalizar" style="display: none;">Enviar Respuestas</button>
+        </form>
     </div>
 
-    <script>
-        // Recuperar datos guardados por registro.js o login.js
-        const status = sessionStorage.getItem('estadoEvaluado');
-        const id = sessionStorage.getItem('evaluadoId');
-
-        if (!status) {
-            // Si intenta entrar sin loguearse, lo mandamos al login
-            window.location.href = 'login.html';
-        } else {
-            document.getElementById('userStatus').textContent = status;
-            document.getElementById('userIdDisplay').textContent = id;
-        }
-
-        function cerrarSesion() {
-            sessionStorage.clear();
-            window.location.href = 'login.html';
-        }
-    </script>
+    <script src="evaluacion.js"></script>
 </body>
 </html>
