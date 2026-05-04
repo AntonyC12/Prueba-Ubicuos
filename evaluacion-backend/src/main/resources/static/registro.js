@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const nombre = document.getElementById('registroNombre').value.trim();
         const password = document.getElementById('registroPassword').value.trim();
 
+        //KAN 33 Validación de campos
         if (!credencial || !nombre || !password) {
             mostrarAlerta('Todos los campos son obligatorios.', 'error');
             return;
