@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error('Error al registrar en la base de datos');
 
             const data = await response.json();
-
+            //KANS 
             sessionStorage.setItem('evaluadoId', data.id);
             
             sessionStorage.setItem('estadoEvaluado', 'Autenticado');
