@@ -1,4 +1,4 @@
-package com.uce.prueba.evaluacion.infrestructura.controller;
+package com.uce.prueba.evaluacion.infraestructura;
 
 import com.uce.prueba.evaluacion.aplicacion.RealizarExamen;
 import com.uce.prueba.evaluacion.dominio.model.Respuesta;
