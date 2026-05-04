@@ -10,19 +10,21 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SeguridadConfig {
 
+    // Mantiene tu encriptador de contraseñas vivo
     @Bean
-    public PasswordEncoder bCryptPasswordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // Le dice a Spring Security que NO bloquee tus páginas ni tu API
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Solo desarrollo, evita errores al usar POST desde JS
+            .csrf(csrf -> csrf.disable()) // Necesario para que tu registro.js pueda hacer POST
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/**").permitAll()  // Tus endpoints REST
-                .requestMatchers("/**").permitAll()      // Tu UI (html/js/css)
+                .anyRequest().permitAll() // Permite entrar a registro.html sin login previo
             );
+            
         return http.build();
     }
 }

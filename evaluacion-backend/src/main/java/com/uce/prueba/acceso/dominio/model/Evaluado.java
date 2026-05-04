@@ -7,12 +7,14 @@ public class Evaluado {
     
     private Long id;
     private String nombre;
-    private Credencial credencial; // Agrupa email y password (hash)
+    // Sustituimos String email por el Value Object Credencial
+    private Credencial credencial; 
     private LocalDateTime fechaRegistro;
 
     public Evaluado() {
     }
 
+    // Constructor actualizado para recibir la Credencial
     public Evaluado(Long id, String nombre, Credencial credencial, LocalDateTime fechaRegistro) {
         this.id = id;
         this.nombre = nombre;
@@ -20,6 +22,7 @@ public class Evaluado {
         this.fechaRegistro = fechaRegistro;
     }
 
+    // Getters y Setters actualizados
     public Long getId() {
         return id;
     }
@@ -36,6 +39,7 @@ public class Evaluado {
         this.nombre = nombre;
     }
 
+    // Cambiamos getEmail por getCredencial para que el Repositorio lo encuentre
     public Credencial getCredencial() {
         return credencial;
     }

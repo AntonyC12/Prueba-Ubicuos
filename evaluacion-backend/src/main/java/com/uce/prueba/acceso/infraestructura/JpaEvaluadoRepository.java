@@ -1,13 +1,14 @@
 package com.uce.prueba.acceso.infraestructura;
 
-import com.uce.prueba.acceso.dominio.model.Evaluado;
-import com.uce.prueba.acceso.dominio.repository.EvaluadoRepository;
-import org.springframework.stereotype.Repository;
-import com.uce.prueba.acceso.dominio.model.Credencial;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Repository;
+
+import com.uce.prueba.acceso.dominio.model.Credencial;
+import com.uce.prueba.acceso.dominio.model.Evaluado;
+import com.uce.prueba.acceso.dominio.repository.EvaluadoRepository;
 
 @Repository
 public class JpaEvaluadoRepository implements EvaluadoRepository {
@@ -55,22 +56,26 @@ public class JpaEvaluadoRepository implements EvaluadoRepository {
 
     private EvaluadoEntity toEntity(Evaluado evaluado) {
         EvaluadoEntity entity = new EvaluadoEntity();
-        entity.setId(evaluado.getId());
+
+        if (evaluado.getId() != null) {
+            entity.setId(Long.valueOf(evaluado.getId()));
+        }
+
         entity.setNombre(evaluado.getNombre());
-        entity.setEmail(evaluado.getCredencial().getEmail());      
-        entity.setPassword(evaluado.getCredencial().getPassword()); // Obtenemos el hash del VO
+        entity.setEmail(evaluado.getCredencial().getEmail());
+        entity.setPassword(evaluado.getCredencial().getPassword());
         entity.setFechaRegistro(evaluado.getFechaRegistro());
-        
+
         return entity;
     }
 
     private Evaluado toDomain(EvaluadoEntity entity) {
-        Credencial credencial = new Credencial(entity.getEmail(), entity.getPassword());
-        return new Evaluado(
-                entity.getId(),
-                entity.getNombre(),
-                credencial,
-                entity.getFechaRegistro()
-        );
-    }
+    Credencial credencial = new Credencial(entity.getEmail(), entity.getPassword());
+    return new Evaluado(
+            entity.getId(), 
+            entity.getNombre(),
+            credencial,
+            entity.getFechaRegistro()
+    );
+}
 }
