@@ -1,4 +1,4 @@
-package com.uce.prueba.acceso;
+package com.uce.prueba;
 
 import com.uce.prueba.acceso.aplicacion.AutenticarEvaluado;
 import com.uce.prueba.acceso.aplicacion.RegistrarEvaluado;
@@ -52,6 +52,7 @@ class AutenticacionIntegrationTest {
                 registrarEvaluado.ejecutar(nombre, credencial);
 
         assertNotNull(evaluadoRegistrado.getId());
+        System.out.println("Evaluado registrado con ID: " + evaluadoRegistrado.getId());
         assertEquals(email, evaluadoRegistrado.getCredencial().getEmail());
 
         // 3. AUTENTICACIÓN (LEE DESDE POSTGRES)
