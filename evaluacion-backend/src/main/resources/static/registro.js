@@ -4,12 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!form) {
         console.error("Error: No se encontró el formulario 'registroForm' en el HTML.");
-        return; 
+        return;
     }
 
     form.addEventListener('submit', async (evento) => {
-        evento.preventDefault(); 
-        
+        evento.preventDefault();
+
         mensajeAlerta.style.display = 'none';
 
         const credencial = document.getElementById('registroCredencial').value.trim();
@@ -43,8 +43,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) throw new Error('Error al registrar en la base de datos');
 
+            const data = await response.json();
+
+            // KAN-32: Guardamos el ID de forma segura en la sesión del navegador
+            sessionStorage.setItem('evaluadoId', data.id); // Asegúrate de que tu backend devuelve 'id', si no, pon el nombre correcto.
+
+            // KAN-31: Emitimos el estado global
+            sessionStorage.setItem('estadoEvaluado', 'Autenticado');
+
+
             mostrarAlerta('¡Registro exitoso! Redirigiendo...', 'success');
-            
+
             setTimeout(() => {
                 window.location.href = 'evaluacion.html';
             }, 2000);
