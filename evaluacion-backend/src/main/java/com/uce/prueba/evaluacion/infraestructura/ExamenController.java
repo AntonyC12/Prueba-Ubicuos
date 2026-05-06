@@ -74,7 +74,8 @@ public class ExamenController {
 
     @GetMapping("/{evaluadoId}/resultado")
     public ResponseEntity<Map<String, Object>> obtenerResultado(@PathVariable Long evaluadoId) {
-
+        
+        //optional para manejar el caso donde el diagnóstico aún no se ha procesado o no existe
         Optional<Nota> notaOpt = notaRepository.buscarPorEvaluadoId(evaluadoId);
 
         Map<String, Object> response = new HashMap<>();
