@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch('http://localhost:8080/api/autenticacion/login', {
+            const response = await fetch('http://18.219.237.246:8080/api/autenticacion/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(loginData)
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // revisa el estado del evaluado para decidir a dónde enviarlo
     async function verificarEstado(evaluadoId) {
         try {
-            const response = await fetch(`http://localhost:8080/api/evaluacion/${evaluadoId}/resultado`);
+            const response = await fetch(`http://18.219.237.246:8080/api/evaluacion/${evaluadoId}/resultado`);
             const data = await response.json();
 
             console.log('Estado evaluacion:', data);

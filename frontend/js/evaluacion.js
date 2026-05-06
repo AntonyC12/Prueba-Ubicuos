@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 2. OBTENER LAS PREGUNTAS DEL BACKEND
     try {
-        const response = await fetch('http://localhost:8080/api/evaluacion/reactivos');
+        const response = await fetch('http://18.219.237.246:8080/api/evaluacion/reactivos');
         if (!response.ok) throw new Error('Error al conectar con el servidor.');
         
         const data = await response.json();
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         try {
             // Fíjate cómo usamos el evaluadoId del SessionStorage en la URL
-            const response = await fetch(`http://localhost:8080/api/evaluacion/${evaluadoId}/finalizar`, {
+            const response = await fetch(`http://18.219.237.246:8080/api/evaluacion/${evaluadoId}/finalizar`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(respuestasData)

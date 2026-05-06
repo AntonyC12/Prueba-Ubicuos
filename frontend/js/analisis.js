@@ -7,7 +7,7 @@ const evaluadoId = sessionStorage.getItem('evaluadoId');
         // Función para obtener el resultado del examen luego de finalizarlo
         async function obtenerResultado() {
             try {
-                const response = await fetch(`http://localhost:8080/api/evaluacion/${evaluadoId}/resultado`);
+                const response = await fetch(`http://18.219.237.246:8080/api/evaluacion/${evaluadoId}/resultado`);
                 const data = await response.json();
 
                 console.log(data);
