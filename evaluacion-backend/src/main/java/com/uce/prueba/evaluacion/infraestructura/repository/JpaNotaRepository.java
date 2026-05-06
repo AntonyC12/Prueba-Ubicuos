@@ -1,10 +1,12 @@
 package com.uce.prueba.evaluacion.infraestructura.repository;
 
+import java.util.Optional;
+
+import org.springframework.stereotype.Repository;
+
 import com.uce.prueba.evaluacion.dominio.model.NivelComprension;
 import com.uce.prueba.evaluacion.dominio.model.Nota;
 import com.uce.prueba.evaluacion.dominio.repository.NotaRepository;
-import org.springframework.stereotype.Repository;
-import java.util.Optional;
 
 @Repository
 public class JpaNotaRepository implements NotaRepository {
@@ -39,4 +41,5 @@ public class JpaNotaRepository implements NotaRepository {
                 entity.getTotal()
             ));
     }
+    
 }
