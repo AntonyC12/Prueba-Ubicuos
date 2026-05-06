@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 🔥 FUNCIÓN CLAVE
+    // revisa el estado del evaluado para decidir a dónde enviarlo
     async function verificarEstado(evaluadoId) {
         try {
             const response = await fetch(`http://localhost:8080/api/evaluacion/${evaluadoId}/resultado`);
