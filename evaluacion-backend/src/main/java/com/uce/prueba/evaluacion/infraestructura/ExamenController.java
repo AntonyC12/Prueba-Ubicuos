@@ -78,6 +78,7 @@ public class ExamenController {
         //optional para manejar el caso donde el diagnóstico aún no se ha procesado o no existe
         Optional<Nota> notaOpt = notaRepository.buscarPorEvaluadoId(evaluadoId);
 
+        // mapeando respuesta para incluir estado, mensaje y resultado si está disponible
         Map<String, Object> response = new HashMap<>();
 
         if (notaOpt.isEmpty()) {
@@ -87,6 +88,8 @@ public class ExamenController {
         }
 
         Nota nota = notaOpt.get();
+
+        // agregando detalles del resultado al response
 
         response.put("estado", "FINALIZADO");
         response.put(
