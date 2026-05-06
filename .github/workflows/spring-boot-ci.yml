@@ -1,6 +1,5 @@
 name: Integracion Continua - Evaluacion UCE
 
-# El flujo se activará con pushes o pull requests hacia Dev y main
 on:
   push:
     branches: [ "main", "Dev" ]
