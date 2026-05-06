@@ -7,6 +7,7 @@ on:
   pull_request:
     branches: [ "main", "Dev" ]
 
+#Definir trabajos 
 jobs:
   build:
     name: Compilar y Verificar
