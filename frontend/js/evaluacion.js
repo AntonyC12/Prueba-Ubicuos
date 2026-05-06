@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // 3. ENVIAR LAS RESPUESTAS AL BACKEND
+    // 3. ENVIAR LAS RESPUESeTAS AL BACKEND
     form.addEventListener('submit', async (evento) => {
         evento.preventDefault();
         
@@ -97,6 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             btnFinalizar.textContent = 'Procesando...';
 
             // Limpiamos la sesión y lo mandamos al login tras 4 segundos
+            // Nueva url: analisis.html
             setTimeout(() => {
                 window.location.href = '../pages/analisis.html';
             }, 4000);
