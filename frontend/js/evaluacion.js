@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // 3. ENVIAR LAS RESPUESeTAS AL BACKEND
+    // 3. ENVIAR LAS RESPUESTAS AL BACKEND
     form.addEventListener('submit', async (evento) => {
         evento.preventDefault();
         

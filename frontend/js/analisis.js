@@ -3,7 +3,8 @@ const evaluadoId = sessionStorage.getItem('evaluadoId');
         if (!evaluadoId) {
             window.location.href = '../pages/login.html';
         }
-
+        
+        // Función para obtener el resultado del examen luego de finalizarlo
         async function obtenerResultado() {
             try {
                 const response = await fetch(`http://localhost:8080/api/evaluacion/${evaluadoId}/resultado`);
