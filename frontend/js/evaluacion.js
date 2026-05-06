@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (estado !== 'Autenticado' || !evaluadoId) {
         // Si no está autenticado, lo botamos al login sin piedad
-        window.location.href = 'login.html';
+        window.location.href = '../pages/login.html';
         return; 
     }
 
@@ -87,6 +87,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!response.ok) throw new Error('Error al enviar el examen.');
 
             const resultado = await response.json();
+            // Guardamos los datos para la siguiente página
+            sessionStorage.setItem('resultado', JSON.stringify(resultado));
+            console.log(resultado)
             
             // Éxito: Bloqueamos el botón y mostramos el mensaje del backend
             mostrarAlerta(resultado.mensaje, 'success');
@@ -94,9 +97,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             btnFinalizar.textContent = 'Procesando...';
 
             // Limpiamos la sesión y lo mandamos al login tras 4 segundos
+            // Nueva url: analisis.html
             setTimeout(() => {
-                sessionStorage.clear();
-                window.location.href = 'login.html';
+                window.location.href = '../pages/analisis.html';
             }, 4000);
 
         } catch (error) {

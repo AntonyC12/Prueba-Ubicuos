@@ -1,18 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('loginForm');
-    const mensajeAlerta = document.getElementById('mensajeError'); // ID corregido
-    const btnLogin = document.getElementById('btnIngresar'); // ID corregido
+    const mensajeAlerta = document.getElementById('mensajeError');
+    const btnLogin = document.getElementById('btnIngresar');
 
     form.addEventListener('submit', async (evento) => {
         evento.preventDefault();
 
         mensajeAlerta.style.display = 'none';
 
-        // CAPTURA (KAN-13) - IDs corregidos
         const credencial = document.getElementById('credencialEmail').value.trim();
         const password = document.getElementById('credencialPassword').value.trim();
 
-        // VALIDACIONES (KAN-14)
         if (!credencial || !password) {
             mostrarAlerta('Por favor, ingresa tu credencial y contraseña.', 'error');
             return;
@@ -24,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // MAPEO
         const loginData = {
             email: credencial,
             password: password
@@ -42,16 +39,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
-            mostrarAlerta('¡Bienvenido! Entrando al sistema...', 'success');
+            mostrarAlerta('¡Bienvenido! Verificando estado...', 'success');
 
-            // KAN-32: Guardamos el ID
-            sessionStorage.setItem('evaluadoId', data.evaluadoId || data.id);
-            
-            // KAN-31: Emitimos el estado para el Guard (¡Esto evita que te rebote!)
+            const evaluadoId = data.evaluadoId || data.id;
+
+            // Guardamos sesión
+            sessionStorage.setItem('evaluadoId', evaluadoId);
             sessionStorage.setItem('estadoEvaluado', 'Autenticado');
-            
+
+            // 🔥 NUEVO: verificar si ya hizo el examen
             setTimeout(() => {
-                window.location.href = 'evaluacion.html';
+                verificarEstado(evaluadoId);
             }, 1000);
 
         } catch (error) {
@@ -59,11 +57,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // revisa el estado del evaluado para decidir a dónde enviarlo
+    async function verificarEstado(evaluadoId) {
+        try {
+            const response = await fetch(`http://localhost:8080/api/evaluacion/${evaluadoId}/resultado`);
+            const data = await response.json();
+
+            console.log('Estado evaluacion:', data);
+
+            if (data.estado === 'FINALIZADO') {
+                // ✅ Ya respondió → va a resultados
+                window.location.href = '../pages/analisis.html';
+            } else {
+                // 🟢 No ha respondido → va al examen
+                window.location.href = '../pages/evaluacion.html';
+            }
+
+        } catch (error) {
+            console.error(error);
+            // fallback por si falla el endpoint
+            window.location.href = '../pages/evaluacion.html';
+        }
+    }
+
     function mostrarAlerta(mensaje, tipo) {
         mensajeAlerta.textContent = mensaje;
         mensajeAlerta.style.display = 'block';
         
-        // Ajuste de colores rápido por si es éxito o error
         if (tipo === 'success') {
             mensajeAlerta.style.backgroundColor = '#dcfce7';
             mensajeAlerta.style.color = '#166534';
