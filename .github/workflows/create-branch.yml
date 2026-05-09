@@ -1,0 +1,83 @@
+name: Create Branch From Jira
+
+on:
+  repository_dispatch:
+    types: [jira-ticket-created]
+
+jobs:
+  create-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate safe branch name
+        id: branch
+        env:
+          ISSUE_KEY: ${{ github.event.client_payload.issue_key }}
+          ISSUE_SUMMARY: ${{ github.event.client_payload.issue_summary }}
+          ISSUE_TYPE: ${{ github.event.client_payload.issue_type }}
+        run: |
+
+          # Prefix según tipo de ticket
+          PREFIX="feature"
+
+          if [[ "$ISSUE_TYPE" == "Bug" ]]; then
+            PREFIX="bugfix"
+          fi
+
+          if [[ "$ISSUE_TYPE" == "Hotfix" ]]; then
+            PREFIX="hotfix"
+          fi
+
+          # Construir nombre base
+          RAW_BRANCH="$PREFIX/$ISSUE_KEY-$ISSUE_SUMMARY"
+
+          echo "Raw branch:"
+          echo "$RAW_BRANCH"
+
+          # Sanitizar:
+          # - minúsculas
+          # - reemplazar espacios y caracteres raros por -
+          # - evitar dobles --
+          SAFE_BRANCH=$(echo "$RAW_BRANCH" \
+            | tr '[:upper:]' '[:lower:]' \
+            | sed 's/[^a-z0-9._\/-]/-/g' \
+            | sed 's/--*/-/g' \
+            | sed 's#/#/#g' \
+            | sed 's/^-//' \
+            | sed 's/-$//')
+
+          echo "Safe branch:"
+          echo "$SAFE_BRANCH"
+
+          echo "branch=$SAFE_BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Check if branch exists
+        id: check_branch
+        env:
+          BRANCH_NAME: ${{ steps.branch.outputs.branch }}
+        run: |
+
+          if git ls-remote --heads origin "$BRANCH_NAME" | grep "$BRANCH_NAME"; then
+            echo "Branch already exists"
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Branch does not exist"
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create branch
+        if: steps.check_branch.outputs.exists == 'false'
+        env:
+          BRANCH_NAME: ${{ steps.branch.outputs.branch }}
+        run: |
+
+          git checkout -b "$BRANCH_NAME"
+          git push origin "$BRANCH_NAME"
+
+      - name: Branch already exists
+        if: steps.check_branch.outputs.exists == 'true'
+        run: |
+          echo "Skipping branch creation because it already exists."
