@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 6. Enviamos a Spring Boot
         try {
-            const response = await fetch('http://localhost:8080/api/autenticacion/registro', {
+            const response = await fetch('http://18.219.237.246:8080/api/autenticacion/registro', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(nuevoEvaluado)
